@@ -12,7 +12,6 @@
     "types": [
       "@types/node"
     ],
-
     "typeRoots": [
       "../node_modules/@types"
     ]
@@ -23,6 +22,6 @@
   ],
   "angularCompilerOptions": {
     "genDir": "./ngfactory",
-    "skipMetadataEmit" : true
+    "skipMetadataEmit": true
   }
 }
