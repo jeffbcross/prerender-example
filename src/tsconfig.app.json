@@ -1,18 +1,28 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-  "lib": [
-    "es2016",
-    "dom"
-  ],
+    "lib": [
+      "es2016",
+      "dom"
+    ],
     "outDir": "../out-tsc/app",
     "target": "es5",
-    "module": "es2015",
+    "module": "commonjs",
     "baseUrl": "",
-    "types": []
+    "types": [
+      "@types/node"
+    ],
+
+    "typeRoots": [
+      "../node_modules/@types"
+    ]
   },
   "exclude": [
     "test.ts",
     "**/*.spec.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "genDir": "./ngfactory",
+    "skipMetadataEmit" : true
+  }
 }

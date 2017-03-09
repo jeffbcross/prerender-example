@@ -44,7 +44,9 @@ export class ListComponent {
     ListComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({
+      appId: 'prerender-example'
+    }),
     FormsModule,
     HttpModule,
     RouterModule.forRoot([{
