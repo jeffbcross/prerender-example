@@ -8,7 +8,10 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "prerender": "yarn prerender:build && yarn prerender:serve",
+    "prerender:build": "ng build --prod --aot",
+    "prerender:serve": "ts-node src/server.ts -P src/tsconfig.app.json"
   },
   "private": true,
   "dependencies": {
