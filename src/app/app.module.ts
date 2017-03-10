@@ -2,13 +2,22 @@ import { BrowserModule } from '@angular/platform-browser';
 import { Component, NgModule, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule, Http } from '@angular/http';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Resolve, ActivatedRoute } from '@angular/router';
 import { APP_BASE_HREF } from '@angular/common';
 import { Observable } from "rxjs/Observable";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
 import { AppComponent } from './app.component';
+
+export class ListResolver implements Resolve<string[]> {
+  constructor(private http: Http, @Inject(APP_BASE_HREF) private baseHref: string) {}
+
+  resolve() {
+    return this.http.get(`${this.baseHref}/assets/list.json`)
+      .map(res => res.json());
+  }
+}
 
 @Component({
   template: '<h1>Welcome Home</h1>'
@@ -26,14 +35,11 @@ export class HomeComponent {}
 export class ListComponent {
   list: Observable<string[]>;
 
-  constructor(private http: Http, @Inject(APP_BASE_HREF) private baseHref: string) {}
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.list = this.http.get(`${this.baseHref}/assets/list.json`)
-      .map(res => res.json())
-      .do(() => {
-        if (typeof window !== 'undefined' && window.performance) window.performance.mark('angular-interactive');
-      });
+    this.list = this.route.data.map(data => data[0]);
+    if (typeof window !== 'undefined' && window.performance) window.performance.mark('angular-interactive');
   }
 }
 
@@ -54,13 +60,17 @@ export class ListComponent {
       component: HomeComponent
     },{
       path: 'list',
-      component: ListComponent
+      component: ListComponent,
+      resolve: [ListResolver]
     }])
   ],
-  providers: [{
-    provide: APP_BASE_HREF,
-    useValue: 'http://localhost:6795'
-  }],
+  providers: [
+    ListResolver,
+    {
+      provide: APP_BASE_HREF,
+      useValue: 'http://localhost:6795'
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
